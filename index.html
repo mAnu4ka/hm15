@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="mg__r">
+        <input type="text" placeholder="Поиск задачи" class="search">
+        <select name="todo" id="1">
+            <option value="All todo">All todo</option>
+            <option value="done">done</option>
+            <option value="not done">not done</option>
+        </select>
+        <button data-input="3" data-but data-with='698px' data-haight='630px' data-select>Создать задачу</button>
+        <h1>TODO</h1>
+    </header>
+    <main>
+        <section class="left mg__r">
+            <p class="main__p"> Is not Done! - <span class="num">4</span></p>
+            <div class="main__ap greed">
+            </div>
+        </section>
+        <div class="line"></div>
+        <section class="raight">
+            <p class="main__p">Is Done! - <span class="num__done">4</span></p>
+            <div class="main__ap_done greed">
+            </div>
+        </section>
+    </main>
+    <div class="bg-modal"></div>
+    <div class="course-modal">
+        <div class="course-modal-mobil">
+            <form></form>
+        </div>
+    </div>
+</body>
+<script src="main.js"></script>
+
+</html>
