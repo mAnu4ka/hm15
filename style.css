@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz&display=swap');
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -25,7 +27,7 @@ h1 {
     font-size: 70px;
     line-height: 85px;
     align-items: center;
-    margin-left: 233px;
+    margin-left: 141px;
 }
 
 .search {
@@ -121,6 +123,7 @@ h2 {
 .time {
     color: #A6A6A6;
 }
+
 .course-modal {
     display: none;
     width: 0px;
@@ -135,7 +138,7 @@ h2 {
     opacity: 0
 }
 
-.course-modal-mobil form{
+.course-modal-mobil form {
     width: 100%;
     height: 100%;
     padding: 56px 97px;
@@ -160,13 +163,15 @@ h2 {
     border: 1px solid #000000;
     border-radius: 10px;
 }
-.course-modal-mobil form select{
+
+.course-modal-mobil form select {
     width: 100%;
     padding: 19px 25px;
     border: 1px solid #000000;
     border-radius: 10px;
 }
-.course-modal-mobil{
+
+.course-modal-mobil {
     width: 100%;
 }
 
@@ -191,6 +196,46 @@ h2 {
     transition: .2s ease;
     backdrop-filter: blur(7px);
 }
-.create{
+
+.create {
     margin-left: 0px;
+}
+
+.dleraka {
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    text-align: center;
+    font-size: 10vmin;
+    line-height: 1;
+    letter-spacing: 4px;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(90deg, black, white, black);
+    background-size: 70% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    animation: shade 5s linear infinite;
+}
+
+@keyframes shade {
+    0% {
+        background-position-x: -500%;
+    }
+
+    100% {
+        background-position-x: 500%;
+    }
+}
+
+.bg-daler-aka {
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    /* opacity: 0; */
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    transition: .2s ease;
 }

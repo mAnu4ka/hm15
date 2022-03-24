@@ -688,21 +688,54 @@ let arr = [{
     },
 ]
 
-let main__ap = document.querySelector('.main__ap')
-let main__ap_done = document.querySelector('.main__ap_done')
 let course_modal = document.querySelector('.course-modal')
 let bg_modal = document.querySelector('.bg-modal')
 let body = document.querySelector('body')
 let form = document.querySelector('form')
+let main__ap
+let main__ap_done
 let concerdone = 0
 let concernotdone = 0
+let options = document.querySelectorAll('option')
+let search_inp = document.querySelector('input')
 
+const createMain = (what) => {
+    let main = document.querySelector('main')
+    let main__top = `<section class="left mg__r">
+                            <p class="main__p"> Is not Done! - <span class="num">4</span></p>
+                            <div class="main__ap greed">
+                            </div>
+                     </section>`
+    let main__boot =
+        `<div class="line"></div>
+    <section class="raight">
+        <p class="main__p">Is Done! - <span class="num__done">4</span></p>
+        <div class="main__ap_done greed">
+        </div>
+    </section>`
+
+    if (what == 'alldone') {
+        main.innerHTML = main__top + main__boot
+    } else if (what == 'done') {
+        main.innerHTML = main__top
+    } else main.innerHTML = main__boot
+    main__ap = document.querySelector('.main__ap')
+    main__ap_done = document.querySelector('.main__ap_done')
+
+    clear()
+}
+const clear = () => {
+    concerdone = 0
+    concernotdone = 0
+    main__ap_done.innerHTML = ' '
+    main__ap.innerHTML = ' '
+}
 const Createbloke = (bloke, elemnt, comlited__or__not, text, yes) => {
     elemnt.innerHTML += `<div class="item">
             <h2>${bloke.title}</h2>
             <span class="time">${bloke.time}</span>
             <div class="inp__with__p">
-                <input type="checkbox" ${yes}>
+                <input type="checkbox" ${yes} id='${bloke.id}'>
                 <p class="${comlited__or__not} def__chek" >${text}</p>
             </div>
             </div>`
@@ -712,18 +745,17 @@ const Createbloke = (bloke, elemnt, comlited__or__not, text, yes) => {
 }
 
 const schet = (done__num, not__done) => {
-
     let done__span = document.querySelector('.num__done')
     let not__done__span = document.querySelector('.num')
     done__span.innerText = done__num
     not__done__span.innerText = not__done
 }
 
-const search = () => {
-    concerdone = 0
-    concernotdone = 0
-    main__ap_done.innerHTML = ' '
-    main__ap.innerHTML = ' '
+const search = (arr, warare) => {
+    createMain(warare)
+
+    let arrStr = JSON.stringify(arr);
+    localStorage.setItem('arr', arrStr);
     for (let item of arr) {
         if (item.completed == true) {
             Createbloke(item, main__ap_done, 'done', 'done', 'checked')
@@ -733,9 +765,10 @@ const search = () => {
     }
 }
 
+
 let arr_plesholder_for_inp = ['Name', 'Time', 'Выберите готовность задачи']
-let arr_name_for_inp = ['title', 'time', 'complirted']
-let option_TEXT = ['done', 'not done', ]
+let arr_name_for_inp = ['title', 'time', 'completed']
+let option_TEXT = [true, false, ]
 
 const createmobile = (input, text) => {
     form.innerHTML = ' '
@@ -816,14 +849,19 @@ const anim = (butensclose) => {
         }
     }
 }
+
 const REGEX = () => {
-    let counter_have_to
-    let counter = 0
-    let Create_New_Task= {}
     form.onsubmit = () => {
         event.preventDefault()
         let fm = new FormData(form)
+        let Create_New_Task = {
+            id: Math.random,
+        }
         fm.forEach((a, b) => {
+            if (a == 'true' || a == 'false') {
+                let bol = Boolean(a)
+                Create_New_Task[b] = bol
+            }
             Create_New_Task[b] = a
         })
         let butensclose = document.querySelectorAll('.create')
@@ -831,15 +869,78 @@ const REGEX = () => {
             but.onclick = () => {
                 closeModal()
                 arr.push(Create_New_Task);
-                search()
+
+                search(arr)
             }
         }
     }
 }
 
+const local__search = (Whare) => {
+    let arr2 = localStorage.getItem('arr');
+    const obj = JSON.parse(arr2);
+    if (obj == null) {
+        search(arr, Whare)
+        chekbox(arr, Whare)
+        search__item(obj, Whare)
+    } else {
+        search(obj, Whare)
+        chekbox(obj, Whare)
+        search__item(obj, Whare)
+    }
+}
+
+const whare__push = () => {
+    let value__select = document.getElementById("months").value
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("elem").onclick = function () {
+            value__select = document.getElementById("months").value
+        };
+    });
+    console.log(value__select);
+
+    local__search(value__select)
+}
+
+const chekbox = (mass, Whare) => {
+    let checkbox = document.querySelectorAll('input[type="checkbox"]')
+    for (const item of checkbox) {
+        item.onclick = () => {
+            let id = +item.getAttribute('id')
+            let find = mass.find(item => item.id == id)
+            let idx = mass.indexOf(find)
+            if (mass[idx].completed == true) mass[idx].completed = false
+            else mass[idx].completed = true
+            search(mass, Whare)
+        }
+    }
+}
+
+const search__item = (mass, Whare) => {
+    search_inp.onkeyup = () => {
+        let find = mass.find(item => search_inp.value == item.title)
+        let obj2 = []
+        obj2.push(find)
+        clear()
+        for (let item of obj2) {
+            if (item.completed == true) {
+                Createbloke(item, main__ap_done, 'done', 'done', 'checked')
+            } else {
+                Createbloke(item, main__ap, 'not__done', 'not done', ' ', )
+            }
+        }
+    }
+}
+let bg_daler_aka = document.querySelector('.bg-daler-aka')
+let dleraka = document.querySelector('.dleraka')
+
+setTimeout(() => {
+    dleraka.style.display = 'none'
+    bg_daler_aka.style.display = 'none'
+}, 5000);
+
+
+whare__push()
 
 anim([])
-
-
-
-search()
