@@ -698,6 +698,8 @@ let concerdone = 0
 let concernotdone = 0
 let options = document.querySelectorAll('option')
 let search_inp = document.querySelector('input')
+let checkbox
+body.style.overflow = 'hidden'
 
 const createMain = (what) => {
     let main = document.querySelector('main')
@@ -716,21 +718,35 @@ const createMain = (what) => {
 
     if (what == 'alldone') {
         main.innerHTML = main__top + main__boot
+        main__ap = document.querySelector('.main__ap')
+        main__ap_done = document.querySelector('.main__ap_done')
     } else if (what == 'done') {
         main.innerHTML = main__top
-    } else main.innerHTML = main__boot
-    main__ap = document.querySelector('.main__ap')
-    main__ap_done = document.querySelector('.main__ap_done')
+        main__ap = document.querySelector('.main__ap')
+    } else {
+        main.innerHTML = main__boot
+        main__ap_done = document.querySelector('.main__ap_done')
+    }
 
-    clear()
+
+    clear(what)
 }
-const clear = () => {
-    concerdone = 0
-    concernotdone = 0
-    main__ap_done.innerHTML = ' '
-    main__ap.innerHTML = ' '
+const clear = (what) => {
+    if (what == 'alldone') {
+        main__ap.innerHTML = ' '
+        main__ap_done.innerHTML = ' '
+        concerdone = 0
+        concernotdone = 0
+    } else if (what == 'done') {
+        main__ap.innerHTML = ' '
+        concerdone = 0
+    } else {
+        main__ap_done.innerHTML = ' '
+        concernotdone = 0
+    }
 }
-const Createbloke = (bloke, elemnt, comlited__or__not, text, yes) => {
+
+const Createbloke = (bloke, elemnt, comlited__or__not, text, yes, what) => {
     elemnt.innerHTML += `<div class="item">
     <h2>${bloke.title}</h2>
     <span class="time">${bloke.time}</span>
@@ -741,26 +757,44 @@ const Createbloke = (bloke, elemnt, comlited__or__not, text, yes) => {
     </div>`
     if (comlited__or__not == 'done') concerdone++
     else concernotdone++
-    schet(concerdone, concernotdone)
+
+    if (elemnt == main__ap_done) schet(concerdone, concernotdone, what)
+    else schet(concerdone, concernotdone, what)
+
+    checkbox = document.querySelectorAll('input[type="checkbox"]')
+
+    for (const item of checkbox) {
+        item.onclick = () => {
+            whare__push()
+        }
+    }
 }
 
-const schet = (done__num, not__done) => {
-    let done__span = document.querySelector('.num__done')
-    let not__done__span = document.querySelector('.num')
-    done__span.innerText = done__num
-    not__done__span.innerText = not__done
+const schet = (done__num, not__done, what) => {
+    if (what == 'alldone') {
+        let done__span = document.querySelector('.num__done')
+        done__span.innerText = done__num
+        let not__done__span = document.querySelector('.num')
+        not__done__span.innerText = not__done
+    } else if (what == 'notdone') {
+        let done__span = document.querySelector('.num__done')
+        done__span.innerText = done__num
+    } else {
+        let not__done__span = document.querySelector('.num')
+        not__done__span.innerText = not__done
+    }
 }
 
-const search = (arr, warare) => {
-    createMain(warare)
+const search = (arr, what) => {
+    createMain(what)
 
     let arrStr = JSON.stringify(arr);
     localStorage.setItem('arr', arrStr);
     for (let item of arr) {
-        if (item.completed == true) {
-            Createbloke(item, main__ap_done, 'done', 'done', 'checked')
+        if (item.completed == true && what == 'alldone') {
+            Createbloke(item, main__ap_done, 'done', 'done', 'checked', what)
         } else {
-            Createbloke(item, main__ap, 'not__done', 'not done', ' ', )
+            Createbloke(item, main__ap, 'not__done', 'not done', ' ', what)
         }
     }
 }
@@ -875,29 +909,22 @@ const REGEX = () => {
         }
     }
 }
+let times = setTimeout(() => {
+    checkbox = document.querySelectorAll('input[type="checkbox"]')
+}, 10);
 
-let checkbox = document.querySelectorAll('input[type="checkbox"]')
 
 const local__search = (Whare) => {
     checkbox = document.querySelectorAll('input[type="checkbox"]')
     let arr2 = localStorage.getItem('arr');
     const obj = JSON.parse(arr2);
-    console.log(checkbox);
     if (obj == null) {
         search(arr, Whare)
         search__item(obj, Whare)
-        for (const item of checkbox) {
-            item.onclick = () => {
-                chekbox(arr, Whare)
-            }
-        }
+        chekbox(arr, Whare)
     } else {
         search(obj, Whare)
-        for (const item of checkbox) {
-            item.onclick = () => {
-                chekbox(obj, Whare)
-            }
-        }
+        chekbox(obj, Whare)
         search__item(obj, Whare)
         search__item(obj, Whare)
     }
@@ -905,8 +932,6 @@ const local__search = (Whare) => {
 
 const whare__push = () => {
     let value__select = document.getElementById("months").value
-
-    console.log(value__select);
 
     local__search(value__select)
 }
@@ -947,6 +972,7 @@ let dleraka = document.querySelector('.dleraka')
 setTimeout(() => {
     dleraka.style.display = 'none'
     bg_daler_aka.style.display = 'none'
+    body.style.overflow = 'scroll'
 }, 5000);
 
 
@@ -955,11 +981,8 @@ document.addEventListener("DOMContentLoaded", function () {
         whare__push()
     };
 });
-for (const item of checkbox) {
-    console.log(item);
-    item.onclick = () => {
-        whare__push()
-    }
-}
+
+
+
 whare__push()
 anim([])
