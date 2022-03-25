@@ -702,16 +702,16 @@ let search_inp = document.querySelector('input')
 const createMain = (what) => {
     let main = document.querySelector('main')
     let main__top = `<section class="left mg__r">
-                            <p class="main__p"> Is not Done! - <span class="num">4</span></p>
-                            <div class="main__ap greed">
-                            </div>
-                     </section>`
+    <p class="main__p"> Is not Done! - <span class="num">4</span></p>
+    <div class="main__ap greed">
+    </div>
+    </section>`
     let main__boot =
         `<div class="line"></div>
     <section class="raight">
-        <p class="main__p">Is Done! - <span class="num__done">4</span></p>
-        <div class="main__ap_done greed">
-        </div>
+    <p class="main__p">Is Done! - <span class="num__done">4</span></p>
+    <div class="main__ap_done greed">
+    </div>
     </section>`
 
     if (what == 'alldone') {
@@ -732,13 +732,13 @@ const clear = () => {
 }
 const Createbloke = (bloke, elemnt, comlited__or__not, text, yes) => {
     elemnt.innerHTML += `<div class="item">
-            <h2>${bloke.title}</h2>
-            <span class="time">${bloke.time}</span>
-            <div class="inp__with__p">
-                <input type="checkbox" ${yes} id='${bloke.id}'>
-                <p class="${comlited__or__not} def__chek" >${text}</p>
-            </div>
-            </div>`
+    <h2>${bloke.title}</h2>
+    <span class="time">${bloke.time}</span>
+    <div class="inp__with__p">
+    <input type="checkbox" ${yes} id='${bloke.id}'>
+    <p class="${comlited__or__not} def__chek" >${text}</p>
+    </div>
+    </div>`
     if (comlited__or__not == 'done') concerdone++
     else concernotdone++
     schet(concerdone, concernotdone)
@@ -876,16 +876,29 @@ const REGEX = () => {
     }
 }
 
+let checkbox = document.querySelectorAll('input[type="checkbox"]')
+
 const local__search = (Whare) => {
+    checkbox = document.querySelectorAll('input[type="checkbox"]')
     let arr2 = localStorage.getItem('arr');
     const obj = JSON.parse(arr2);
+    console.log(checkbox);
     if (obj == null) {
         search(arr, Whare)
-        chekbox(arr, Whare)
         search__item(obj, Whare)
+        for (const item of checkbox) {
+            item.onclick = () => {
+                chekbox(arr, Whare)
+            }
+        }
     } else {
         search(obj, Whare)
-        chekbox(obj, Whare)
+        for (const item of checkbox) {
+            item.onclick = () => {
+                chekbox(obj, Whare)
+            }
+        }
+        search__item(obj, Whare)
         search__item(obj, Whare)
     }
 }
@@ -893,18 +906,14 @@ const local__search = (Whare) => {
 const whare__push = () => {
     let value__select = document.getElementById("months").value
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("elem").onclick = function () {
-            value__select = document.getElementById("months").value
-        };
-    });
     console.log(value__select);
 
     local__search(value__select)
 }
 
 const chekbox = (mass, Whare) => {
-    let checkbox = document.querySelectorAll('input[type="checkbox"]')
+    checkbox = document.querySelectorAll('input[type="checkbox"]')
+
     for (const item of checkbox) {
         item.onclick = () => {
             let id = +item.getAttribute('id')
@@ -941,6 +950,16 @@ setTimeout(() => {
 }, 5000);
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("elem").onclick = function () {
+        whare__push()
+    };
+});
+for (const item of checkbox) {
+    console.log(item);
+    item.onclick = () => {
+        whare__push()
+    }
+}
 whare__push()
-
 anim([])
