@@ -731,6 +731,7 @@ const createMain = (what) => {
 
     clear(what)
 }
+
 const clear = (what) => {
     if (what == 'alldone') {
         main__ap.innerHTML = ' '
@@ -751,7 +752,10 @@ const Createbloke = (bloke, elemnt, comlited__or__not, text, yes, what) => {
     <h2>${bloke.title}</h2>
     <span class="time">${bloke.time}</span>
     <div class="inp__with__p">
+    <label class="container">
     <input type="checkbox" ${yes} id='${bloke.id}'>
+    <span class="checkmark"></span>
+    </label>
     <p class="${comlited__or__not} def__chek" >${text}</p>
     </div>
     </div>`
@@ -798,7 +802,6 @@ const search = (arr, what) => {
         }
     }
 }
-
 
 let arr_plesholder_for_inp = ['Name', 'Time', 'Выберите готовность задачи']
 let arr_name_for_inp = ['title', 'time', 'completed']
@@ -903,8 +906,7 @@ const REGEX = () => {
             but.onclick = () => {
                 closeModal()
                 arr.push(Create_New_Task);
-
-                search(arr)
+                search(arr, 'alldone')
             }
         }
     }
@@ -914,26 +916,25 @@ let times = setTimeout(() => {
 }, 10);
 
 
-const local__search = (Whare) => {
+const local__search = (Whare, somethig) => {
     checkbox = document.querySelectorAll('input[type="checkbox"]')
     let arr2 = localStorage.getItem('arr');
     const obj = JSON.parse(arr2);
     if (obj == null) {
         search(arr, Whare)
-        search__item(obj, Whare)
+        search__item(arr, Whare)
         chekbox(arr, Whare)
     } else {
         search(obj, Whare)
+        search__item(obj, Whare)
         chekbox(obj, Whare)
-        search__item(obj, Whare)
-        search__item(obj, Whare)
     }
 }
 
-const whare__push = () => {
+const whare__push = (somethig) => {
     let value__select = document.getElementById("months").value
 
-    local__search(value__select)
+    local__search(value__select, somethig)
 }
 
 const chekbox = (mass, Whare) => {
@@ -956,11 +957,13 @@ const search__item = (mass, Whare) => {
         let find = mass.find(item => search_inp.value == item.title)
         let obj2 = []
         obj2.push(find)
-        clear()
+        clear(Whare)
         for (let item of obj2) {
             if (item.completed == true) {
+                createMain(Whare)
                 Createbloke(item, main__ap_done, 'done', 'done', 'checked')
             } else {
+                createMain(Whare)
                 Createbloke(item, main__ap, 'not__done', 'not done', ' ', )
             }
         }
@@ -978,11 +981,17 @@ setTimeout(() => {
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("elem").onclick = function () {
+        console.log(concernotdone);
+        concernotdone = 0
         whare__push()
     };
 });
 
 
+search_inp.onkeyup = () => {
+    whare__push()
+}
 
 whare__push()
+
 anim([])
